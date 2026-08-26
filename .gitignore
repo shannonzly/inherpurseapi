@@ -1,0 +1,19 @@
+.firebase/
+*.log
+node_modules/
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Optional local bulk data (download per README; keeps pushes small)
+data/*.csv
+
+# Secrets and local env (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+**/serviceAccount*.json

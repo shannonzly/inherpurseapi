@@ -1,0 +1,11 @@
+{
+  "name": "benefit-eligibility",
+  "private": true,
+  "devDependencies": {
+    "firebase-tools": "^14.0.0"
+  },
+  "scripts": {
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:hosting:spark": "firebase deploy --only hosting --config firebase.spark.json"
+  }
+}

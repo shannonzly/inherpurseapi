@@ -1,0 +1,13 @@
+.git
+.env
+.env.*
+frontend
+node_modules
+**/__pycache__
+**/*.pyc
+.next
+frontend/out
+data
+*.md
+.DS_Store
+.firebase
