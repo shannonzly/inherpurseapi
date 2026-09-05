@@ -20,9 +20,6 @@ def _listing_summary(listing: dict[str, Any]) -> str:
     appl_desc = appl.get("description") if isinstance(appl, dict) else ""
     ben_desc = ben.get("description") if isinstance(ben, dict) else ""
     app = listing.get("assistanceApplication") or {}
-    deadlines = (app.get("deadlines") or {}) if isinstance(app, dict) else {}
-    dead_val = deadlines.get("value") if isinstance(deadlines, dict) else ""
-    dead_desc = deadlines.get("description") if isinstance(deadlines, dict) else ""
     proc = (app.get("applicationProcedure") or {}) if isinstance(app, dict) else {}
     app_url = proc.get("url") or proc.get("URL") or ""
     app_proc_desc = proc.get("description") if isinstance(proc, dict) else ""
@@ -43,7 +40,7 @@ def _listing_summary(listing: dict[str, Any]) -> str:
     return (
         f"ID: {aid}\nTitle: {title}\nObjective: {obj}\nDescription: {desc}\n"
         f"Applicant eligibility: {appl_desc}\nBeneficiary eligibility: {ben_desc}\n"
-        f"Deadlines: {dead_val} {dead_desc}\nApplication URL: {app_url}\nApplication: {app_proc_desc}\n"
+        f"Application URL: {app_url}\nApplication: {app_proc_desc}\n"
         f"Award types/amounts: {'; '.join(award_parts)}\n"
         f"Approval: {approval.get('interval')} - {approval.get('description')}\n"
         f"Renewal: {renewal.get('interval')} - {renewal.get('description')}"
@@ -92,9 +89,9 @@ CRITICAL: Evaluate match ONLY on the attributes the user actually provided. If t
 Rank programs by how well the user fits on the information provided: "Full match" (user clearly meets all criteria that can be checked from their profile), "Strong match" (meets most checkable criteria), "Partial match" (meets some; other criteria unknown or need verification). Return the TOP 10 programs that are most relevant for this user, ordered from best match to weakest. For each program output exactly these keys:
 - source: program name or title
 - prize: type of benefit and amount/description (e.g. "Grant, $X–Y" or "Direct Payment")
-- deadline: deadline information from the program
+- deadline: always an empty string (do not invent or copy application due dates; catalog dates are often stale)
 - eligibility_met: what the user meets based on their profile; for any program criterion the user did not provide info for, say "Check program for: [criterion]" or "May depend on: [criterion]"
-- how_to_claim: application URL and brief steps to apply
+- how_to_claim: application URL and brief steps to apply; do not include calendar due dates
 - assistance_listing_id: the program ID from the summary
 - assistance_type: award category (e.g. Grant, Loan, Direct Payment)
 - timeliness: how quickly benefits can take effect (from approval/renewal info or "Varies")
@@ -142,7 +139,6 @@ def filter_and_format(req: MatchRequest, listings: list[dict[str, Any]]) -> list
             result.append(MatchItem(
                 source=item.get("source") or "",
                 prize=item.get("prize") or "",
-                deadline=item.get("deadline") or "",
                 eligibility_met=item.get("eligibility_met") or "",
                 how_to_claim=item.get("how_to_claim") or "",
                 assistance_listing_id=item.get("assistance_listing_id"),

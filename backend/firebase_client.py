@@ -39,10 +39,12 @@ def _get_firestore():
 
 
 _CACHE_COLLECTION = "match_cache"
+# Bump when cached MatchItem shape/content must be regenerated (e.g. hiding stale deadlines).
+_CACHE_VERSION = "v2-no-deadlines"
 
 
 def _cache_key(profile_json: str, program_ids: list[str]) -> str:
-    payload = profile_json + "|" + ",".join(sorted(program_ids))
+    payload = _CACHE_VERSION + "|" + profile_json + "|" + ",".join(sorted(program_ids))
     return hashlib.sha256(payload.encode()).hexdigest()
 
 

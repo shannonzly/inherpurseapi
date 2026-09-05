@@ -126,7 +126,7 @@ def match(request: MatchRequest):
     profile_json = json.dumps(request.model_dump(), sort_keys=True)
     cached = get_cached_matches(profile_json, ids)
     if cached is not None:
-        matches = [MatchItem(**m) for m in cached]
+        matches = [MatchItem(**{**m, "deadline": ""}) for m in cached]
         return MatchResponse(matches=matches, total=len(matches), candidates_evaluated=len(listings))
     try:
         matches = filter_and_format(request, listings)

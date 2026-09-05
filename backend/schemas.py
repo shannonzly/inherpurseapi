@@ -29,7 +29,7 @@ class MatchRequest(BaseModel):
 class MatchItem(BaseModel):
     source: str = Field(..., description="Benefit/scholarship name or ID")
     prize: str = Field(..., description="Type and amount/description of benefit")
-    deadline: str = Field(..., description="Deadline information")
+    deadline: str = Field("", description="Unused; catalog due dates are often stale")
     eligibility_met: str = Field(..., description="Eligibility criteria the user met")
     how_to_claim: str = Field(..., description="How to apply or claim")
     assistance_listing_id: str | None = Field(None, description="GSA listing ID for sorting/linking")
